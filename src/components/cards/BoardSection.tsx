@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
-import Sections from '../../enums/sections';
+import Section from '../../enums/section';
 import Task from '../../models/task';
 import TaskCard from './TaskCard';
 import AddTask from '../modals/task/AddTask';
+import User from '../../models/user';
+import Board from '../../models/board';
 
 interface BoardSectionProps {
-    section: Sections;
+    section: Section;
     tasks: Task[];
 }
 
 const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
     const [isAddTaskModalOpen, setAddTaskModalOpen] = useState<boolean>(false);
+    const [boardTasks, setTasks] = useState<Task[]>(tasks);
 
     const openAddTaskModal = () => {
         setAddTaskModalOpen(true);
@@ -19,6 +22,19 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
 
     const closeAddTaskModal = () => {
         setAddTaskModalOpen(false);
+    };
+
+    const handleAddTask = (taskTitle: string, taskDescription: string) => {
+        const newTask: Task = {
+            id: 5,
+            title: taskTitle,
+            description: taskDescription,
+            createdAt: new Date(),
+            createdBy: {} as User,
+            board: {} as Board
+        };
+
+        setTasks((prevTasks) => [...prevTasks, newTask]);
     };
 
     return (
@@ -35,12 +51,11 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
                 </div>
             </div>
             <div className="space-y-4">
-                {tasks.map((task) => (
+                {boardTasks.map((task) => (
                     <TaskCard key={task.id} task={task} />
                 ))}
             </div>
-            {/* AddTask modal */}
-            {isAddTaskModalOpen && <AddTask onClose={closeAddTaskModal} />}
+            {isAddTaskModalOpen && <AddTask section={section} onClose={closeAddTaskModal} onAddTask={handleAddTask} />}
         </div>
     );
 };

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { FiX, FiCheck } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 
 interface AddTaskProps {
+    section: string;
     onClose: () => void;
+    onAddTask: (taskTitle: string, taskDescription: string) => void;
 }
 
-const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
+const AddTask: React.FC<AddTaskProps> = ({ section, onClose, onAddTask }) => {
     const [taskTitle, setTaskTitle] = useState<string>('');
     const [taskDescription, setTaskDescription] = useState<string>('');
 
@@ -18,12 +20,9 @@ const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
     };
 
     const handleAddTask = () => {
-        // Perform the task addition logic here
-        // You may want to call an API or update your state to add the task
-        // Reset the input fields after adding the task
+        onAddTask(taskTitle, taskDescription);
         setTaskTitle('');
         setTaskDescription('');
-        // Close the modal
         onClose();
     };
 
@@ -40,10 +39,11 @@ const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
                     </button>
                 </div>
                 <div className="overflow-y-auto">
-                    <h1 className="text-4xl text-white mb-4">Add Task</h1>
-                    <div className="mb-4">
+                    <h1 className="text-6xl text-white mb-8">Add Task - {section}</h1>
+                    <hr className="mb-8"></hr>
+                    <div className="mb-2">
                         <label htmlFor="taskTitle" className="text-white text-xl">
-                            Task Title
+                            Title
                         </label>
                         <input
                             type="text"
@@ -53,9 +53,9 @@ const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
                             className="p-2 text-white bg-transparent outline-none border border-white w-full"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-2">
                         <label htmlFor="taskDescription" className="text-white text-xl">
-                            Task Description
+                            Description
                         </label>
                         <textarea
                             id="taskDescription"
@@ -71,8 +71,7 @@ const AddTask: React.FC<AddTaskProps> = ({ onClose }) => {
                         onClick={handleAddTask}
                         className="text-white bg-green-500 hover:bg-green-600 rounded-lg text-sm p-2 inline-flex"
                     >
-                        <FiCheck size={20} className="mr-2" />
-                        Add Task
+                        Create
                     </button>
                 </div>
             </div>

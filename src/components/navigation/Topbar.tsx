@@ -65,7 +65,6 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                         <>
                             <h1
                                 className="self-center p-2 sm:p-0 text-5xl sm:text-8xl"
-                                onClick={handleProjectTitleEditClick}
                             >
                                 {projectTitle}
                             </h1>
@@ -74,11 +73,6 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                                 onClick={handleProjectTitleEditClick}
                             >
                                 <FiEdit2 size={40} />
-                            </span>
-                            <span className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer sm:hidden flex"
-                                onClick={handleProjectTitleEditClick}
-                            >
-                                <FiEdit2 size={30} />
                             </span>
                         </>
                     )}

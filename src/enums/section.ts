@@ -1,7 +1,7 @@
-enum Sections {
+enum Section {
     ToDo = 'To do',
     Doing = 'Doing',
     Done = 'Done'
 }
 
-export default Sections;
+export default Section;

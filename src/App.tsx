@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from './components/navigation/Sidebar';
 import BoardDescription from './components/cards/BoardDescription';
 import BoardSection from './components/cards/BoardSection';
-import Sections from './enums/sections';
+import Sections from './enums/section';
 import { mockTask } from './mockData';
 import Topbar from './components/navigation/Topbar';
 
