@@ -1,14 +1,43 @@
 import React from "react";
 import { FiMenu, FiCheck, FiX, FiEdit2, FiChevronDown } from "react-icons/fi";
 import TestImage from '../../assets/test.png';
+import { Link } from "react-router-dom";
 
 interface TopbarProps {
     onToggleSidebar: () => void;
 };
 
+interface DropdownProps {
+    isOpen: boolean;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ isOpen }) => {
+    if (!isOpen) return null;
+
+    const handleSignOutClick = () => {
+        console.log("Sign out clicked");
+    };
+
+    return (
+        <div className="text-gray-900 absolute top-30 right-0 w-40 bg-white border border-gray-300 rounded shadow">
+            <ul className="py-2">
+                <Link to="/profile">
+                    <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
+                        Profile
+                    </li>
+                </Link>
+                <li className="cursor-pointer px-4 py-2 hover:bg-gray-100" onClick={handleSignOutClick}>
+                    Sign out
+                </li>
+            </ul>
+        </div>
+    );
+};
+
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
     const [isEditingProjectTitle, setEditingProjectTitle] = React.useState<boolean>(false);
     const [projectTitle, setProjectTitle] = React.useState<string>('Homify');
+    const [isDropdownOpen, setDropdownOpen] = React.useState<boolean>(false);
 
     const handleToggleSidebar = () => {
         onToggleSidebar();
@@ -28,6 +57,10 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
 
     const handleProjectTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setProjectTitle(event.target.value);
+    };
+
+    const handleDropdownClick = () => {
+        setDropdownOpen(!isDropdownOpen);
     };
 
     return (
@@ -79,17 +112,21 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                 </div>
             </div>
             <div className="flex justify-center sm:items-stretch p-4 sm:p-0 text-white space-x-4">
-                <span className="flex">
+                <span className="flex relative cursor-pointer" onClick={handleDropdownClick}>
                     <h1 className="self-center text-4xl">Anas Mourad</h1>
-                    <span className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer">
+                    <span
+                        className="self-center text-white focus:outline-none"
+                    >
                         <FiChevronDown size={40} />
+                        <Dropdown isOpen={isDropdownOpen} />
                     </span>
                 </span>
                 <div className="hidden sm:flex sm:items-center">
                     <img src={TestImage} style={{ borderRadius: "50%", width: "150px", height: "150px" }} />
                 </div>
             </div>
-        </header>);
+        </header>
+    );
 };
 
 export default Topbar;
