@@ -13,12 +13,14 @@ const UserDetails: React.FC = () => {
     const [isEditingUserLastName, setIsEditingUserLastName] = React.useState<boolean>(false);
     const [isEditingUserEmail, setIsEditingUserEmail] = React.useState<boolean>(false);
     const [isEditingUserPhoneNumber, setIsEditingUserPhoneNumber] = React.useState<boolean>(false);
+    const [isEditingPassword, setIsEditingPassword] = React.useState<boolean>(false);
 
     const [firstName, setFirstName] = React.useState<string>(user?.firstName || ""); // Have to use fetched user instead
     const [lastName, setLastName] = React.useState<string>(user?.lastName || ""); // Have to use fetched user
     const [email, setEmail] = React.useState<string>(user?.email || ""); // Have to use fetched user
     const [emailError, setEmailError] = React.useState<string | null>(null); // Have to use fetched user
     const [phoneNumber, setPhoneNumber] = React.useState<string>(user?.phoneNumber || ""); // Have to use fetched user
+    const [password, setPassword] = React.useState<string>(""); // New password field
 
     const handleUserFirstNameEditClick = () => {
         setIsEditingUserFirstName(true);
@@ -90,6 +92,20 @@ const UserDetails: React.FC = () => {
     const handleUserPhoneNumberCrossClick = () => {
         setIsEditingUserPhoneNumber(false);
         setPhoneNumber(user?.phoneNumber || "");
+    };
+
+    const handlePasswordEditClick = () => {
+        setIsEditingPassword(true);
+    };
+
+    const handlePasswordCheckClick = () => {
+        setIsEditingPassword(false);
+        // Handle the password change logic here
+    };
+
+    const handlePasswordCrossClick = () => {
+        setIsEditingPassword(false);
+        setPassword(""); // Reset the password field when discarding changes
     };
 
     return (
@@ -254,6 +270,45 @@ const UserDetails: React.FC = () => {
                     )}
                 </div>
             </div>
+            {isCurrentUser && (
+                <div className="mb-4">
+                    <h2 className="text-3xl">Change Password</h2>
+                    <div className="flex">
+                        {isEditingPassword ? (
+                            <>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
+                                />
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handlePasswordCheckClick}
+                                >
+                                    <FiCheck size={20} />
+                                </span>
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handlePasswordCrossClick}
+                                >
+                                    <FiX size={20} />
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                <p className="text-xl font-thin">********</p>
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handlePasswordEditClick}
+                                >
+                                    <FiEdit2 size={20} />
+                                </span>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
