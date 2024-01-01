@@ -4,13 +4,14 @@ import Sidebar from './components/navigation/Sidebar';
 import { FiMenu, FiEdit2, FiChevronDown, FiPlus, FiCheck, FiX } from 'react-icons/fi';
 import TestImage from './assets/test.png';
 import BoardDescription from './components/cards/BoardDescription';
+import BoardSection from './components/cards/BoardSection';
+import Sections from './enums/sections';
+import { mockTask } from './mockData';
 
 const App: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [isEditingProjectTitle, setEditingProjectTitle] = useState<boolean>(false);
-
-  const [projectTitle, setProjectTitle] = useState<string>('Homify'); // Initial text for h1 element
-  const [projectDescription, setProjectDescription] = React.useState<string>("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+  const [projectTitle, setProjectTitle] = useState<string>('Homify');
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -106,106 +107,9 @@ const App: React.FC = () => {
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-8 space-y-8 text-gray-800">
           <BoardDescription description={"asdas"} />
           <div className="grid grid-cols-1 sm:grid-cols-3 sm:space-x-8 space-y-8 sm:space-y-0 h-full">
-            <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl flex flex-col">
-              <div className="flex items-center mb-4">
-                <h2 className="font-semibold text-4xl flex-grow text-center">
-                  To Do
-                </h2>
-                <div className="rounded-full bg-white p-3 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer">
-                  <span>
-                    <FiPlus />
-                  </span>
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-white p-4 flex justify-between">
-                  <span className="text-xl">
-                    Cook lunch
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-                <div className="bg-white p-4 flex justify-between">
-                  <span className="text-xl">
-                    Walk the dog
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-                <div className="bg-white p-4 flex justify-between">
-                  <span className="text-xl">
-                    Wash the car
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl flex flex-col">
-              <h2 className="flex justify-center mb-4 font-semibold text-4xl text-center">
-                Doing
-              </h2>
-              <div className="space-y-4">
-                <div className="bg-white p-4 flex justify-between">
-                  <span className="text-xl">
-                    Create mock-ups
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-                <div className="bg-white p-4 flex justify-between">
-                  <span className="text-xl">
-                    Drink coffee
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl flex flex-col">
-              <h2 className="flex justify-center mb-4 font-semibold text-4xl text-center">
-                Done
-              </h2>
-              <div className="space-y-4 text-xl">
-                <div className="bg-green-100 p-4 flex justify-between">
-                  <span className="text-xl">
-                    Wake up
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-                <div className="bg-green-100 p-4 flex justify-between">
-                  <span className="text-xl">
-                    Brush teeth
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-                <div className="bg-green-100 p-4 flex justify-between">
-                  <span className="text-xl">
-                    Go for a walk
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-                <div className="bg-green-100 p-4 flex justify-between">
-                  <span className="text-xl">
-                    Write some code
-                  </span>
-                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
-                    View
-                  </span>
-                </div>
-              </div>
-            </div>
+            <BoardSection section={Sections.ToDo} tasks={[mockTask]} />
+            <BoardSection section={Sections.Doing} tasks={[mockTask]} />
+            <BoardSection section={Sections.Done} tasks={[mockTask]} />
           </div>
         </main>
       </div>
