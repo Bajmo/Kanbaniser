@@ -180,7 +180,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
                             Created by
                         </h2>
                         <p className="text-white text-xl font-thin">
-                            {task?.createdBy.firstName} {task?.createdBy.lastName}
+                            {task?.createdBy?.firstName} {task?.createdBy?.lastName}
                         </p>
                     </div>
                     <div className="mb-2">

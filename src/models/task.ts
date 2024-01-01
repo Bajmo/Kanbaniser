@@ -6,7 +6,7 @@ interface Task {
     title: string;
     description: string;
     createdAt: Date;
-    createdBy: User;
+    createdBy: User | null;
     section: Section;
 }
 
