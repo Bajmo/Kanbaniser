@@ -4,9 +4,8 @@ import Sidebar from './components/navigation/Sidebar';
 import Topbar from './components/navigation/Topbar';
 import HomePage from './pages/HomePage';
 import BoardPage from './pages/BoardPage';
-import { BoardProvider } from './components/providers/BoardProvider';
 import { UserProvider } from './components/providers/UserProvider';
-import { mockBoard1, mockUser2 } from './mockData';
+import { mockUser2 } from './mockData';
 import UserDetails from './components/cards/UserDetails';
 import NotFound from './components/cards/NotFound';
 // import Board from './models/board';
@@ -29,20 +28,18 @@ const App: React.FC = () => {
     <Router>
       <>
         <UserProvider user={mockUser2}>
-          <BoardProvider board={mockBoard1}>
-            <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
-            <div className="flex flex-col h-screen">
-              <Topbar onToggleSidebar={handleToggleSidebar} />
-              <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-8 space-y-8 text-gray-800">
-                <Routes>
-                  <Route path="/users/:userId" element={<UserDetails />} />
-                  <Route path="/boards/:boardId" element={<BoardPage />} />
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-            </div>
-          </BoardProvider>
+          <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <div className="flex flex-col h-screen">
+            <Topbar onToggleSidebar={handleToggleSidebar} />
+            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-8 space-y-8 text-gray-800">
+              <Routes>
+                <Route path="/users/:userId" element={<UserDetails />} />
+                <Route path="/boards/:boardId" element={<BoardPage />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+          </div>
         </UserProvider>
       </>
     </Router>
