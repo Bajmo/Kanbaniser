@@ -5,9 +5,11 @@ import Task from "../../../models/task";
 interface TaskDetailsProps {
     task: Task;
     onClose: () => void;
+    onDeleteTask: (taskId: number) => void; // Add onDeleteTask prop
+    onUpdateTask: (taskId: number, updatedTask: Task) => void; // Add onUpdateTask prop
 }
 
-const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose }) => {
+const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onDeleteTask, onUpdateTask }) => {
     const [isEditingTaskTitle, setEditingTaskTitle] = useState<boolean>(false);
     const [isEditingTaskDescription, setEditingTaskDescription] = useState<boolean>(false);
     const [taskTitle, setTaskTitle] = useState<string>(task?.title || "");
@@ -21,6 +23,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose }) => {
         // Save the edited title and exit edit mode
         // You might want to add a mechanism to update the task title in your data store.
         setEditingTaskTitle(false);
+        onUpdateTask(task.id, { ...task, title: taskTitle });
     };
 
     const handleTaskTitleCrossClick = () => {
@@ -41,6 +44,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose }) => {
         // Save the edited description and exit edit mode
         // You might want to add a mechanism to update the task description in your data store.
         setEditingTaskDescription(false);
+        onUpdateTask(task.id, { ...task, description: taskDescription });
     };
 
     const handleTaskDescriptionCrossClick = () => {
@@ -51,6 +55,11 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose }) => {
 
     const handleTaskDescriptionInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTaskDescription(event.target.value);
+    };
+
+    const handleDeleteTask = () => {
+        onDeleteTask(task.id);
+        onClose(); // Close the modal after deleting the task
     };
 
     return (
@@ -162,7 +171,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose }) => {
                 <div className="flex justify-end my-auto">
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={handleDeleteTask}
                         className="text-white bg-red-500 hover:bg-red-600 rounded-lg text-sm p-2 inline-flex"
                     >
                         Delete

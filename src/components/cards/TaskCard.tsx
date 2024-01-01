@@ -4,9 +4,11 @@ import TaskDetails from "../modals/task/TaskDetails";
 
 interface TaskCardProps {
     task: Task;
-};
+    onDeleteTask: (taskId: number) => void;
+    onUpdateTask: (taskId: number, updatedTask: Task) => void;
+}
 
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onDeleteTask, onUpdateTask }) => {
     const [isDetailsOpen, setDetailsOpen] = React.useState(false);
 
     const handleViewDetails = () => {
@@ -24,7 +26,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
                     View
                 </span>
             </div>
-            {isDetailsOpen && <TaskDetails task={task} onClose={() => setDetailsOpen(false)} />}
+            {isDetailsOpen && (
+                <TaskDetails
+                    task={task}
+                    onClose={() => setDetailsOpen(false)}
+                    onDeleteTask={onDeleteTask}
+                    onUpdateTask={onUpdateTask}
+                />
+            )}
         </>
     );
 };

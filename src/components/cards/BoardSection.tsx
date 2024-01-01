@@ -26,7 +26,7 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
 
     const handleAddTask = (taskTitle: string, taskDescription: string) => {
         const newTask: Task = {
-            id: 5,
+            id: boardTasks.length + 1,
             title: taskTitle,
             description: taskDescription,
             createdAt: new Date(),
@@ -35,6 +35,17 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
         };
 
         setTasks((prevTasks) => [...prevTasks, newTask]);
+    };
+
+    const handleDeleteTask = (taskId: number) => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    };
+
+    const handleUpdateTask = (taskId: number, updatedTask: Task) => {
+        // Handle updating the task directly within BoardSection
+        setTasks((prevTasks) =>
+            prevTasks.map((task) => (task.id === taskId ? { ...task, ...updatedTask } : task))
+        );
     };
 
     return (
@@ -52,7 +63,7 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
             </div>
             <div className="space-y-4">
                 {boardTasks.map((task) => (
-                    <TaskCard key={task.id} task={task} />
+                    <TaskCard key={task.id} task={task} onDeleteTask={handleDeleteTask} onUpdateTask={handleUpdateTask} />
                 ))}
             </div>
             {isAddTaskModalOpen && <AddTask section={section} onClose={closeAddTaskModal} onAddTask={handleAddTask} />}
