@@ -30,12 +30,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <div className="py-4 overflow-y-auto">
         <div className="flex justify-between mb-2">
           <h5 id="drawer-navigation-label" className="text-2xl text-white">
-            Projects
+            Boards
           </h5>
-          <div className="rounded-full bg-white p-2">
-            <span className="text-black">
-              <FiPlus />
-            </span>
+          <div className="rounded-full bg-white p-2 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer">
+            <FiPlus />
           </div>
         </div>
         <hr></hr>
@@ -44,7 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <li>
             <a href="#" className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
               <span>Homify</span>
-              <span className="text-red-400">
+              <span className="text-red-400 hover:text-red-900 cursor-pointer">
                 <FiTrash2 />
               </span>
             </a>
@@ -52,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <li>
             <a href="#" className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
               <span>Tinywheels</span>
-              <span className="text-red-400">
+              <span className="text-red-400 hover:text-red-900 cursor-pointer">
                 <FiTrash2 />
               </span>
             </a>
@@ -60,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <li>
             <a href="#" className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
               <span>Test Project</span>
-              <span className="text-red-400">
+              <span className="text-red-400 hover:text-red-900 cursor-pointer">
                 <FiTrash2 />
               </span>
             </a>
@@ -73,10 +71,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <h5 id="drawer-navigation-label" className="text-2xl text-white">
             Team Members
           </h5>
-          <div className="rounded-full bg-white p-2">
-            <span className="text-black">
-              <FiPlus />
-            </span>
+          <div className="rounded-full bg-white p-2 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer">
+            <FiPlus />
           </div>
         </div>
         <hr></hr>
@@ -85,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <li>
             <a href="#" className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
               <span>Anas Mourad</span>
-              <span className="text-red-400">
+              <span className="text-red-400 hover:text-red-900 cursor-pointer">
                 <FiTrash2 />
               </span>
             </a>
@@ -93,7 +89,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <li>
             <a href="#" className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
               <span>Imad Maailil</span>
-              <span className="text-red-400">
+              <span className="text-red-400 hover:text-red-900 cursor-pointer">
                 <FiTrash2 />
               </span>
             </a>
@@ -101,7 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <li>
             <a href="#" className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
               <span>Hamza Lghali</span>
-              <span className="text-red-400">
+              <span className="text-red-400 hover:text-red-900 cursor-pointer">
                 <FiTrash2 />
               </span>
             </a>

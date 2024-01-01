@@ -1,20 +1,38 @@
 // App.tsx
 import React, { useState } from 'react';
 import Sidebar from './components/navigation/Sidebar';
-import { FiMenu, FiEdit2, FiChevronDown, FiPlus } from 'react-icons/fi';
+import { FiMenu, FiEdit2, FiChevronDown, FiPlus, FiCheck, FiX } from 'react-icons/fi';
 import TestImage from './assets/test.png';
-
-const text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+import BoardDescription from './components/cards/BoardDescription';
 
 const App: React.FC = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [isEditingProjectTitle, setEditingProjectTitle] = useState<boolean>(false);
+
+  const [projectTitle, setProjectTitle] = useState<string>('Homify'); // Initial text for h1 element
+  const [projectDescription, setProjectDescription] = React.useState<string>("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
 
-  const truncatedText = isExpanded ? text : `${text.slice(0, 200)}...`;
+  const handleProjectTitleEditClick = () => {
+    setEditingProjectTitle(true);
+  };
+
+  const handleProjectTitleCheckClick = () => {
+    setEditingProjectTitle(false);
+    // You can perform any additional logic here when confirming the edit
+  };
+
+  const handleProjectTitleCrossClick = () => {
+    setEditingProjectTitle(false);
+    // You can perform any additional logic here when canceling the edit
+  };
+
+  const handleProjectTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProjectTitle(event.target.value);
+  };
 
   return (
     <>
@@ -29,19 +47,54 @@ const App: React.FC = () => {
               <FiMenu size={75} />
             </button>
             <div className="flex items-stretch text-white sm:space-x-4">
-              <h1 className="self-center p-2 sm:p-0 text-5xl sm:text-8xl">Homify</h1>
-              <span className="self-center hidden sm:flex">
-                <FiEdit2 size={40} />
-              </span>
-              <span className="self-center sm:hidden flex">
-                <FiEdit2 size={30} />
-              </span>
+              {isEditingProjectTitle ? (
+                <>
+                  <input
+                    type="text"
+                    value={projectTitle}
+                    onChange={handleProjectTitleInputChange}
+                    className="self-center p-2 sm:p-0 text-5xl sm:text-8xl bg-transparent outline-none focus:outline-none text-white w-96"
+                  />
+                  <span
+                    className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
+                    onClick={handleProjectTitleCheckClick}
+                  >
+                    <FiCheck size={40} />
+                  </span>
+                  <span
+                    className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
+                    onClick={handleProjectTitleCrossClick}
+                  >
+                    <FiX size={40} />
+                  </span>
+                </>
+              ) : (
+                <>
+                  <h1
+                    className="self-center p-2 sm:p-0 text-5xl sm:text-8xl"
+                    onClick={handleProjectTitleEditClick}
+                  >
+                    {projectTitle}
+                  </h1>
+                  <span
+                    className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
+                    onClick={handleProjectTitleEditClick}
+                  >
+                    <FiEdit2 size={40} />
+                  </span>
+                  <span className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer sm:hidden flex"
+                    onClick={handleProjectTitleEditClick}
+                  >
+                    <FiEdit2 size={30} />
+                  </span>
+                </>
+              )}
             </div>
           </div>
           <div className="flex justify-center sm:items-stretch p-4 sm:p-0 text-white space-x-4">
             <span className="flex">
               <h1 className="self-center text-4xl">Anas Mourad</h1>
-              <span className="self-center">
+              <span className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer">
                 <FiChevronDown size={40} />
               </span>
             </span>
@@ -51,33 +104,15 @@ const App: React.FC = () => {
           </div>
         </header>
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-8 space-y-8 text-gray-800">
-          <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl flex justify-between">
-            <p className="sm:hidden">
-              {truncatedText}
-              {!isExpanded && (
-                <button
-                  className="text-blue-500 hover:underline cursor-pointer"
-                  onClick={() => setIsExpanded(true)}
-                >
-                  &nbsp;Read more
-                </button>
-              )}
-            </p>
-            <p className="hidden sm:flex">
-              {text}
-            </p>
-            <span>
-              <FiEdit2 size={20} />
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 sm:space-x-8 space-y-8 mb-8 sm:space-y-0 h-full">
+          <BoardDescription description={"asdas"} />
+          <div className="grid grid-cols-1 sm:grid-cols-3 sm:space-x-8 space-y-8 sm:space-y-0 h-full">
             <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl flex flex-col">
               <div className="flex items-center mb-4">
                 <h2 className="font-semibold text-4xl flex-grow text-center">
                   To Do
                 </h2>
-                <div className="rounded-full bg-white p-3">
-                  <span className="text-black">
+                <div className="rounded-full bg-white p-3 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer">
+                  <span>
                     <FiPlus />
                   </span>
                 </div>
@@ -87,7 +122,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Cook lunch
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -95,7 +130,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Walk the dog
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -103,7 +138,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Wash the car
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -118,7 +153,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Create mock-ups
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -126,7 +161,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Drink coffee
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -141,7 +176,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Wake up
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -149,7 +184,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Brush teeth
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -157,7 +192,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Go for a walk
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
@@ -165,7 +200,7 @@ const App: React.FC = () => {
                   <span className="text-xl">
                     Write some code
                   </span>
-                  <span className="text-base">
+                  <span className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center">
                     View
                   </span>
                 </div>
