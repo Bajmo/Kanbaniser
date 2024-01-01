@@ -1,12 +1,11 @@
 import React from "react";
-import { FiMenu, FiCheck, FiX, FiEdit2, FiChevronDown } from "react-icons/fi";
+import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { MAX_TITLE_LENGTH } from "../../constants";
-import { useBoardContext } from "../providers/BoardProvider";
 import { useUserContext } from "../providers/UserProvider";
 
 interface TopbarProps {
     onToggleSidebar: () => void;
+    title: string;
 }
 
 interface DropdownProps {
@@ -38,42 +37,12 @@ const Dropdown: React.FC<DropdownProps> = ({ isOpen }) => {
     );
 };
 
-const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
+const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, title }) => {
     const { user } = useUserContext(); // Act like this is the response from the API call
-    const { board, updateBoard } = useBoardContext(); // Act like this is the response from the API call
-
-    const [isEditingProjectTitle, setEditingProjectTitle] = React.useState<boolean>(false);
-    const [newProjectTitle, setNewProjectTitle] = React.useState<string>(board.title);
     const [isDropdownOpen, setDropdownOpen] = React.useState<boolean>(false);
-    const [isTitleTooLong, setIsTitleTooLong] = React.useState<boolean>(false);
 
     const handleToggleSidebar = () => {
         onToggleSidebar();
-    };
-
-    const handleProjectTitleEditClick = () => {
-        setEditingProjectTitle(true);
-    };
-
-    const handleProjectTitleCheckClick = () => {
-        if (newProjectTitle.length > MAX_TITLE_LENGTH) {
-            setIsTitleTooLong(true);
-        } else {
-            updateBoard({ ...board, title: newProjectTitle }); // Update board title
-            setEditingProjectTitle(false);
-            setIsTitleTooLong(false);
-        }
-    };
-
-    const handleProjectTitleCrossClick = () => {
-        setEditingProjectTitle(false);
-        setNewProjectTitle(board.title); // Revert to the original title
-        setIsTitleTooLong(false);
-    };
-
-    const handleProjectTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNewProjectTitle(event.target.value);
-        setIsTitleTooLong(false); // Reset the error when the input changes
     };
 
     const handleDropdownClick = () => {
@@ -90,47 +59,11 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                     <FiMenu size={75} />
                 </button>
                 <div className="flex items-stretch text-white sm:space-x-4">
-                    {isEditingProjectTitle ? (
-                        <>
-                            <input
-                                type="text"
-                                value={newProjectTitle}
-                                onChange={handleProjectTitleInputChange}
-                                className={`self-center p-2 text-5xl sm:text-8xl bg-transparent border outline-none text-white w-2/4 ${newProjectTitle.length > MAX_TITLE_LENGTH ? "border-red-500" : "border-white"}`}
-                            />
-                            {isTitleTooLong && (
-                                <p className="text-red-500 text-sm ml-3 self-center text-center">
-                                    Too long
-                                </p>
-                            )}
-                            <span
-                                className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
-                                onClick={handleProjectTitleCheckClick}
-                            >
-                                <FiCheck size={40} />
-                            </span>
-                            <span
-                                className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
-                                onClick={handleProjectTitleCrossClick}
-                            >
-                                <FiX size={40} />
-                            </span>
-                        </>
-                    ) : (
-                        <>
-                            <h1
-                                className="self-center p-2 sm:p-0 text-5xl sm:text-8xl"
-                            >
-                                {board.title}
-                            </h1>
-                            <span
-                                className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
-                                onClick={handleProjectTitleEditClick}
-                            >
-                                <FiEdit2 size={40} />
-                            </span>
-                        </>
-                    )}
+                    <h1
+                        className="self-center p-2 sm:p-0 text-5xl sm:text-8xl"
+                    >
+                        {title}
+                    </h1>
                 </div>
             </div>
             <div className="flex justify-center sm:items-stretch p-4 w-1/4 sm:p-0 text-white space-x-4">

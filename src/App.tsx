@@ -8,14 +8,6 @@ import { UserProvider } from './components/providers/UserProvider';
 import { mockUser2 } from './mockData';
 import UserDetails from './components/cards/UserDetails';
 import NotFound from './components/cards/NotFound';
-// import Board from './models/board';
-
-// const intialBoard: Board = {
-//   id: 0,
-//   title: "",
-//   description: "",
-//   tasks: [],
-// };
 
 const App: React.FC = () => {
   const [isSidebarOpen, setSidebarOpen] = React.useState<boolean>(false);
@@ -30,7 +22,7 @@ const App: React.FC = () => {
         <UserProvider user={mockUser2}>
           <Sidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
           <div className="flex flex-col h-screen">
-            <Topbar onToggleSidebar={handleToggleSidebar} />
+            <Topbar onToggleSidebar={handleToggleSidebar} title="" />
             <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-8 space-y-8 text-gray-800">
               <Routes>
                 <Route path="/users/:userId" element={<UserDetails />} />
