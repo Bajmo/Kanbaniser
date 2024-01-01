@@ -8,6 +8,7 @@ import { BoardProvider } from './components/providers/BoardProvider';
 import { UserProvider } from './components/providers/UserProvider';
 import { mockBoard1, mockUser2 } from './mockData';
 import UserDetails from './components/cards/UserDetails';
+import NotFound from './components/cards/NotFound';
 // import Board from './models/board';
 
 // const intialBoard: Board = {
@@ -37,6 +38,7 @@ const App: React.FC = () => {
                   <Route path="/users/:userId" element={<UserDetails />} />
                   <Route path="/boards/:boardId" element={<BoardPage />} />
                   <Route path="/" element={<HomePage />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
             </div>
