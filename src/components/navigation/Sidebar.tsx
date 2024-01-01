@@ -2,8 +2,8 @@ import React from 'react';
 import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
 import { mockBoard1, mockBoard2, mockBoard3, mockUser1, mockUser2, mockUser3 } from '../../mockData';
 import Board from '../../models/board';
-import { Link } from 'react-router-dom';
 import User from '../../models/user';
+import { Link } from 'react-router-dom';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,19 +11,27 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
-  // Make API call to get the boards and team members
-
-  const boards: Board[] = [
+  const [boards, setBoards] = React.useState<Board[]>([
     mockBoard1,
     mockBoard2,
     mockBoard3
-  ];
+  ]);
 
-  const users: User[] = [
+  const [users, setUsers] = React.useState<User[]>([
     mockUser1,
     mockUser2,
     mockUser3
-  ];
+  ]);
+
+  const handleDeleteBoard = (boardId: string) => {
+    const updatedBoards = boards.filter(board => board.id.toString() !== boardId);
+    setBoards(updatedBoards);
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    const updatedUsers = users.filter(user => user.id.toString() !== userId);
+    setUsers(updatedUsers);
+  };
 
   return (
     <div
@@ -60,7 +68,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <li>
                 <div className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
                   <span>{board.title}</span>
-                  <span className="text-red-400 hover:text-red-900 cursor-pointer">
+                  <span
+                    className="text-red-400 hover:text-red-900 cursor-pointer"
+                    onClick={() => handleDeleteBoard(board.id.toString())}
+                  >
                     <FiTrash2 />
                   </span>
                 </div>
@@ -85,7 +96,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <li>
                 <div className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
                   <span>{user.firstName} {user.lastName}</span>
-                  <span className="text-red-400 hover:text-red-900 cursor-pointer">
+                  <span
+                    className="text-red-400 hover:text-red-900 cursor-pointer"
+                    onClick={() => handleDeleteUser(user.id.toString())}
+                  >
                     <FiTrash2 />
                   </span>
                 </div>
