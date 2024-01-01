@@ -6,6 +6,7 @@ import TaskCard from './TaskCard';
 import AddTask from '../modals/task/AddTask';
 import User from '../../models/user';
 import Board from '../../models/board';
+import { TaskProvider } from '../providers/TaskProvider';
 
 interface BoardSectionProps {
     section: Section;
@@ -41,13 +42,6 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
         setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     };
 
-    const handleUpdateTask = (taskId: number, updatedTask: Task) => {
-        // Handle updating the task directly within BoardSection
-        setTasks((prevTasks) =>
-            prevTasks.map((task) => (task.id === taskId ? { ...task, ...updatedTask } : task))
-        );
-    };
-
     return (
         <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl flex flex-col">
             <div className="flex items-center mb-4">
@@ -63,7 +57,9 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
             </div>
             <div className="space-y-4">
                 {boardTasks.map((task) => (
-                    <TaskCard key={task.id} task={task} onDeleteTask={handleDeleteTask} onUpdateTask={handleUpdateTask} />
+                    <TaskProvider task={task}>
+                        <TaskCard key={task.id} onDeleteTask={handleDeleteTask} />
+                    </TaskProvider>
                 ))}
             </div>
             {isAddTaskModalOpen && <AddTask section={section} onClose={closeAddTaskModal} onAddTask={handleAddTask} />}

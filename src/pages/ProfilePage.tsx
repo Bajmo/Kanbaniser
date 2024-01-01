@@ -1,11 +1,15 @@
-import User from "../models/user";
+import React from "react";
+import { UserProvider } from "../components/providers/UserProvider";
+import { mockUser } from "../mockData";
+import UserDetails from "../components/modals/user/UserDetails";
 
-interface ProfilePageProps {
-    user: User;
-};
+const ProfilePage: React.FC = () => {
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
-    return <div>{user.firstName}</div>;
+    return (
+        <UserProvider user={mockUser}>
+            <UserDetails />
+        </UserProvider>
+    );
 };
 
 export default ProfilePage;

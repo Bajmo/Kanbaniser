@@ -1,14 +1,14 @@
 import React from "react";
-import Task from "../../models/task";
 import TaskDetails from "../modals/task/TaskDetails";
+import { useTaskContext } from "../providers/TaskProvider";
 
 interface TaskCardProps {
-    task: Task;
     onDeleteTask: (taskId: number) => void;
-    onUpdateTask: (taskId: number, updatedTask: Task) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onDeleteTask, onUpdateTask }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ onDeleteTask }) => {
+    const { task } = useTaskContext();
+
     const [isDetailsOpen, setDetailsOpen] = React.useState(false);
 
     const handleViewDetails = () => {
@@ -28,10 +28,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onDeleteTask, onUpdateTask })
             </div>
             {isDetailsOpen && (
                 <TaskDetails
-                    task={task}
                     onClose={() => setDetailsOpen(false)}
                     onDeleteTask={onDeleteTask}
-                    onUpdateTask={onUpdateTask}
                 />
             )}
         </>

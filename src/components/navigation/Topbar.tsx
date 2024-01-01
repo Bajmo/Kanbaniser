@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 
 interface TopbarProps {
     onToggleSidebar: () => void;
-};
+    pageTitle: string;
+}
 
 interface DropdownProps {
     isOpen: boolean;
@@ -37,7 +38,9 @@ const Dropdown: React.FC<DropdownProps> = ({ isOpen }) => {
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
     const [isEditingProjectTitle, setEditingProjectTitle] = React.useState<boolean>(false);
     const [projectTitle, setProjectTitle] = React.useState<string>('Homify');
+    const [newProjectTitle, setNewProjectTitle] = React.useState<string>(projectTitle);
     const [isDropdownOpen, setDropdownOpen] = React.useState<boolean>(false);
+    const [isTitleTooLong, setTitleTooLong] = React.useState<boolean>(false);
 
     const handleToggleSidebar = () => {
         onToggleSidebar();
@@ -48,15 +51,23 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
     };
 
     const handleProjectTitleCheckClick = () => {
-        setEditingProjectTitle(false);
+        if (newProjectTitle.length > 13) {
+            setTitleTooLong(true);
+        } else {
+            setProjectTitle(newProjectTitle);
+            setEditingProjectTitle(false);
+            setTitleTooLong(false);
+        }
     };
 
     const handleProjectTitleCrossClick = () => {
         setEditingProjectTitle(false);
+        setTitleTooLong(false);
     };
 
     const handleProjectTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setProjectTitle(event.target.value);
+        setNewProjectTitle(event.target.value);
+        setTitleTooLong(false); // Reset the error when the input changes
     };
 
     const handleDropdownClick = () => {
@@ -77,10 +88,14 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                         <>
                             <input
                                 type="text"
-                                value={projectTitle}
+                                value={newProjectTitle}
                                 onChange={handleProjectTitleInputChange}
-                                className="self-center p-2 text-5xl sm:text-8xl bg-transparent border outline-none text-white w-max"
+                                className={`self-center p-2 text-5xl sm:text-8xl bg-transparent border outline-none text-white w-2/4 ${isTitleTooLong ? "border-red-500" : "border-white"
+                                    }`}
                             />
+                            {isTitleTooLong && (
+                                <p className="text-red-500 text-sm ml-2 self-center">Title is too long</p>
+                            )}
                             <span
                                 className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
                                 onClick={handleProjectTitleCheckClick}
@@ -111,7 +126,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                     )}
                 </div>
             </div>
-            <div className="flex justify-center sm:items-stretch p-4 sm:p-0 text-white space-x-4">
+            <div className="flex justify-center sm:items-stretch p-4 w-1/4 sm:p-0 text-white space-x-4">
                 <span className="flex relative cursor-pointer" onClick={handleDropdownClick}>
                     <h1 className="self-center text-4xl">Anas Mourad</h1>
                     <span

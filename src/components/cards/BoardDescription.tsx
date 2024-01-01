@@ -8,21 +8,31 @@ interface BoardDescriptionProps {
 const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
     const [isEditingProjectDescription, setEditingProjectDescription] = React.useState<boolean>(false);
     const [projectDescription, setProjectDescription] = React.useState<string>(description);
+    const [newProjectDescription, setNewProjectDescription] = React.useState<string>(projectDescription);
+    const [isNewProjectDescriptionTooLong, setIsNewProjectDescriptionTooLong] = React.useState<boolean>(false);
 
     const handleProjectDescriptionEditClick = () => {
         setEditingProjectDescription(true);
     };
 
     const handleProjectDescriptionCheckClick = () => {
-        setEditingProjectDescription(false);
+        if (newProjectDescription.length > 100) {
+            setIsNewProjectDescriptionTooLong(true);
+        } else {
+            setProjectDescription(newProjectDescription);
+            setEditingProjectDescription(false);
+            setIsNewProjectDescriptionTooLong(false);
+        }
     };
 
     const handleProjectDescriptionCrossClick = () => {
         setEditingProjectDescription(false);
+        setIsNewProjectDescriptionTooLong(false);
     };
 
     const handleProjectDescriptionInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setProjectDescription(event.target.value);
+        setNewProjectDescription(event.target.value);
+        setIsNewProjectDescriptionTooLong(false); // Reset the error when the input changes
     };
 
     return (
@@ -30,9 +40,9 @@ const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
             {isEditingProjectDescription ? (
                 <>
                     <textarea
-                        value={projectDescription}
+                        value={newProjectDescription}
                         onChange={handleProjectDescriptionInputChange}
-                        className="self-center p-2 bg-transparent outline-none w-full border"
+                        className={`self-center p-2 bg-transparent outline-none w-full border ${isNewProjectDescriptionTooLong ? "border-red-500" : "border-white"}`}
                     />
                     <span
                         className="self-center text-white hover:text-gray-300 ml-3 focus:outline-none cursor-pointer hidden sm:flex"

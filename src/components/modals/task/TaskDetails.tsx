@@ -1,35 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { FiX, FiEdit2, FiCheck } from "react-icons/fi";
-import Task from "../../../models/task";
+import { useTaskContext } from "../../providers/TaskProvider";
 
 interface TaskDetailsProps {
-    task: Task;
     onClose: () => void;
     onDeleteTask: (taskId: number) => void; // Add onDeleteTask prop
-    onUpdateTask: (taskId: number, updatedTask: Task) => void; // Add onUpdateTask prop
 }
 
-const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onDeleteTask, onUpdateTask }) => {
-    const [isEditingTaskTitle, setEditingTaskTitle] = useState<boolean>(false);
-    const [isEditingTaskDescription, setEditingTaskDescription] = useState<boolean>(false);
-    const [taskTitle, setTaskTitle] = useState<string>(task?.title || "");
-    const [taskDescription, setTaskDescription] = useState<string>(task?.description || "");
+const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
+    const { task, updateTask } = useTaskContext();
+
+    const [isEditingTaskTitle, setEditingTaskTitle] = React.useState<boolean>(false);
+    const [isEditingTaskDescription, setEditingTaskDescription] = React.useState<boolean>(false);
+    const [taskTitle, setTaskTitle] = React.useState<string>(task?.title || "");
+    const [taskDescription, setTaskDescription] = React.useState<string>(task?.description || "");
 
     const handleTaskTitleEditClick = () => {
         setEditingTaskTitle(true);
     };
 
     const handleTaskTitleCheckClick = () => {
-        // Save the edited title and exit edit mode
-        // You might want to add a mechanism to update the task title in your data store.
+        updateTask({ ...task, title: taskTitle }); // Update task title
         setEditingTaskTitle(false);
-        onUpdateTask(task.id, { ...task, title: taskTitle });
     };
 
     const handleTaskTitleCrossClick = () => {
-        // Discard changes and exit edit mode
         setEditingTaskTitle(false);
-        // If you want to revert to the original title, you can setTaskTitle(task?.title || "");
+        setTaskTitle(task?.title || ""); // Revert to the original title
     };
 
     const handleTaskTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,16 +38,13 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onDeleteTask, 
     };
 
     const handleTaskDescriptionCheckClick = () => {
-        // Save the edited description and exit edit mode
-        // You might want to add a mechanism to update the task description in your data store.
+        updateTask({ ...task, description: taskDescription }); // Update task description
         setEditingTaskDescription(false);
-        onUpdateTask(task.id, { ...task, description: taskDescription });
     };
 
     const handleTaskDescriptionCrossClick = () => {
-        // Discard changes and exit edit mode
         setEditingTaskDescription(false);
-        // If you want to revert to the original description, you can setTaskDescription(task?.description || "");
+        setTaskDescription(task?.description || ""); // Revert to the original description
     };
 
     const handleTaskDescriptionInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,7 +53,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onDeleteTask, 
 
     const handleDeleteTask = () => {
         onDeleteTask(task.id);
-        onClose(); // Close the modal after deleting the task
+        onClose();
     };
 
     return (
