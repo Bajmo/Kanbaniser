@@ -5,7 +5,6 @@ import Task from '../../models/task';
 import TaskCard from './TaskCard';
 import AddTask from '../modals/task/AddTask';
 import User from '../../models/user';
-import Board from '../../models/board';
 import { TaskProvider } from '../providers/TaskProvider';
 
 interface BoardSectionProps {
@@ -32,7 +31,7 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
             description: taskDescription,
             createdAt: new Date(),
             createdBy: {} as User,
-            board: {} as Board
+            section: section
         };
 
         setTasks((prevTasks) => [...prevTasks, newTask]);
@@ -57,8 +56,8 @@ const BoardSection: React.FC<BoardSectionProps> = ({ section, tasks }) => {
             </div>
             <div className="space-y-4">
                 {boardTasks.map((task) => (
-                    <TaskProvider task={task}>
-                        <TaskCard key={task.id} onDeleteTask={handleDeleteTask} />
+                    <TaskProvider key={task.id} task={task}>
+                        <TaskCard onDeleteTask={handleDeleteTask} />
                     </TaskProvider>
                 ))}
             </div>

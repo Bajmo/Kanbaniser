@@ -1,14 +1,13 @@
 import React from "react";
 import { FiCheck, FiX, FiEdit2 } from "react-icons/fi";
+import { useBoardContext } from "../providers/BoardProvider";
+import { MAX_DESCRIPTION_LENGTH } from "../../constants";
 
-interface BoardDescriptionProps {
-    description: string;
-};
+const BoardDescription: React.FC = () => {
+    const { board, updateBoard } = useBoardContext();
 
-const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
     const [isEditingProjectDescription, setEditingProjectDescription] = React.useState<boolean>(false);
-    const [projectDescription, setProjectDescription] = React.useState<string>(description);
-    const [newProjectDescription, setNewProjectDescription] = React.useState<string>(projectDescription);
+    const [newProjectDescription, setNewProjectDescription] = React.useState<string>(board.description);
     const [isNewProjectDescriptionTooLong, setIsNewProjectDescriptionTooLong] = React.useState<boolean>(false);
 
     const handleProjectDescriptionEditClick = () => {
@@ -16,10 +15,10 @@ const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
     };
 
     const handleProjectDescriptionCheckClick = () => {
-        if (newProjectDescription.length > 100) {
+        if (newProjectDescription.length > MAX_DESCRIPTION_LENGTH) {
             setIsNewProjectDescriptionTooLong(true);
         } else {
-            setProjectDescription(newProjectDescription);
+            updateBoard({ ...board, description: newProjectDescription }); // Update board description
             setEditingProjectDescription(false);
             setIsNewProjectDescriptionTooLong(false);
         }
@@ -27,12 +26,13 @@ const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
 
     const handleProjectDescriptionCrossClick = () => {
         setEditingProjectDescription(false);
+        setNewProjectDescription(board.description); // Revert to the original description
         setIsNewProjectDescriptionTooLong(false);
     };
 
     const handleProjectDescriptionInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setNewProjectDescription(event.target.value);
-        setIsNewProjectDescriptionTooLong(false); // Reset the error when the input changes
+        setIsNewProjectDescriptionTooLong(false); // Reset length error on input change
     };
 
     return (
@@ -42,8 +42,13 @@ const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
                     <textarea
                         value={newProjectDescription}
                         onChange={handleProjectDescriptionInputChange}
-                        className={`self-center p-2 bg-transparent outline-none w-full border ${isNewProjectDescriptionTooLong ? "border-red-500" : "border-white"}`}
+                        className={`self-center p-2 bg-transparent outline-none w-full border ${newProjectDescription.length > MAX_DESCRIPTION_LENGTH ? "border-red-500" : "border-white"}`}
                     />
+                    {isNewProjectDescriptionTooLong && (
+                        <p className="text-red-500 text-sm ml-3 self-center text-center">
+                            Too long
+                        </p>
+                    )}
                     <span
                         className="self-center text-white hover:text-gray-300 ml-3 focus:outline-none cursor-pointer hidden sm:flex"
                         onClick={handleProjectDescriptionCheckClick}
@@ -59,10 +64,9 @@ const BoardDescription: React.FC<BoardDescriptionProps> = ({ description }) => {
                 </>
             ) : (
                 <>
-                    <p className="hidden sm:flex">
-                        {projectDescription}
-                    </p>
-                    <span className="text-white hover:text-gray-200 ml-3 focus:outline-none cursor-pointer"
+                    <p className="hidden sm:flex">{board.description}</p>
+                    <span
+                        className="text-white hover:text-gray-200 ml-3 focus:outline-none cursor-pointer"
                         onClick={handleProjectDescriptionEditClick}
                     >
                         <FiEdit2 size={20} />

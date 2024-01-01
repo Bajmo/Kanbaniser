@@ -1,6 +1,7 @@
 import React from "react";
 import { FiX, FiEdit2, FiCheck } from "react-icons/fi";
 import { useTaskContext } from "../../providers/TaskProvider";
+import { MAX_DESCRIPTION_LENGTH, MAX_TITLE_LENGTH } from "../../../constants";
 
 interface TaskDetailsProps {
     onClose: () => void;
@@ -14,23 +15,32 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
     const [isEditingTaskDescription, setEditingTaskDescription] = React.useState<boolean>(false);
     const [taskTitle, setTaskTitle] = React.useState<string>(task?.title || "");
     const [taskDescription, setTaskDescription] = React.useState<string>(task?.description || "");
+    const [isNewTaskTitleTooLong, setIsNewTaskTitleTooLong] = React.useState<boolean>(false);
+    const [isNewTaskDescriptionTooLong, setIsNewTaskDescriptionTooLong] = React.useState<boolean>(false);
 
     const handleTaskTitleEditClick = () => {
         setEditingTaskTitle(true);
     };
 
     const handleTaskTitleCheckClick = () => {
-        updateTask({ ...task, title: taskTitle }); // Update task title
-        setEditingTaskTitle(false);
+        if (taskDescription.length > MAX_TITLE_LENGTH) {
+            setIsNewTaskTitleTooLong(true);
+        } else {
+            setEditingTaskTitle(false);
+            updateTask({ ...task, title: taskTitle });
+            setIsNewTaskTitleTooLong(false);
+        }
     };
 
     const handleTaskTitleCrossClick = () => {
         setEditingTaskTitle(false);
-        setTaskTitle(task?.title || ""); // Revert to the original title
+        setTaskTitle(task?.title || "");
+        setIsNewTaskTitleTooLong(false);
     };
 
     const handleTaskTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTaskTitle(event.target.value);
+        setIsNewTaskTitleTooLong(false); // Reset length error on input change
     };
 
     const handleTaskDescriptionEditClick = () => {
@@ -38,17 +48,24 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
     };
 
     const handleTaskDescriptionCheckClick = () => {
-        updateTask({ ...task, description: taskDescription }); // Update task description
-        setEditingTaskDescription(false);
+        if (taskDescription.length > MAX_DESCRIPTION_LENGTH) {
+            setIsNewTaskDescriptionTooLong(true);
+        } else {
+            setEditingTaskDescription(false);
+            updateTask({ ...task, description: taskDescription });
+            setIsNewTaskDescriptionTooLong(false);
+        }
     };
 
     const handleTaskDescriptionCrossClick = () => {
         setEditingTaskDescription(false);
-        setTaskDescription(task?.description || ""); // Revert to the original description
+        setTaskDescription(task?.description || "");
+        setIsNewTaskDescriptionTooLong(false);
     };
 
     const handleTaskDescriptionInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setTaskDescription(event.target.value);
+        setIsNewTaskDescriptionTooLong(false); // Reset length error on input change
     };
 
     const handleDeleteTask = () => {
@@ -71,19 +88,19 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
                 <div className="overflow-y-auto">
                     <div className="flex mb-8">
                         {isEditingTaskTitle ? (
-                            <input
-                                type="text"
-                                value={taskTitle}
-                                onChange={handleTaskTitleInputChange}
-                                className="p-2 text-6xl text-white bg-transparent outline-none border border-white w-full"
-                            />
-                        ) : (
-                            <h1 className="text-6xl text-white">
-                                {taskTitle}
-                            </h1>
-                        )}
-                        {isEditingTaskTitle ? (
                             <>
+                                <input
+                                    type="text"
+                                    value={taskTitle}
+                                    onChange={handleTaskTitleInputChange}
+                                    className={`p-2 text-6xl text-white bg-transparent outline-none border ${taskTitle.length > MAX_TITLE_LENGTH ? "border-red-500" : "border-white"
+                                        } w-full`}
+                                />
+                                {isNewTaskTitleTooLong && (
+                                    <p className="text-red-500 text-sm ml-3 self-center text-center">
+                                        Too long
+                                    </p>
+                                )}
                                 <span
                                     className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
                                     onClick={handleTaskTitleCheckClick}
@@ -98,12 +115,17 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
                                 </span>
                             </>
                         ) : (
-                            <span
-                                className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
-                                onClick={handleTaskTitleEditClick}
-                            >
-                                <FiEdit2 size={20} />
-                            </span>
+                            <>
+                                <h1 className="text-6xl text-white">
+                                    {taskTitle}
+                                </h1>
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handleTaskTitleEditClick}
+                                >
+                                    <FiEdit2 size={20} />
+                                </span>
+                            </>
                         )}
                     </div>
                     <hr className="mb-8"></hr>
@@ -116,8 +138,16 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
                                 <textarea
                                     value={taskDescription}
                                     onChange={handleTaskDescriptionInputChange}
-                                    className="p-2 text-white text-md font-thin bg-transparent outline-none border border-white w-full"
+                                    className={`p-2 text-white text-md font-thin bg-transparent outline-none border ${taskDescription.length > MAX_DESCRIPTION_LENGTH
+                                        ? "border-red-500"
+                                        : "border-white"
+                                        } w-full`}
                                 />
+                                {isNewTaskDescriptionTooLong && (
+                                    <p className="text-red-500 text-sm ml-3 self-center text-center">
+                                        Too long
+                                    </p>
+                                )}
                                 <span
                                     className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
                                     onClick={handleTaskDescriptionCheckClick}

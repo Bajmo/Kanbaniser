@@ -1,20 +1,24 @@
 import React from "react";
 import { FiEdit2, FiCheck, FiX } from "react-icons/fi";
-import { useUserContext } from "../../providers/UserProvider";
+import { useUserContext } from "../providers/UserProvider";
+import { useParams } from "react-router-dom";
 
 const UserDetails: React.FC = () => {
     const { user, updateUser } = useUserContext();
+    const { userId } = useParams<{ userId: string }>();
+
+    const isCurrentUser = user.id !== undefined && userId === user.id.toString();
 
     const [isEditingUserFirstName, setIsEditingUserFirstName] = React.useState<boolean>(false);
     const [isEditingUserLastName, setIsEditingUserLastName] = React.useState<boolean>(false);
     const [isEditingUserEmail, setIsEditingUserEmail] = React.useState<boolean>(false);
     const [isEditingUserPhoneNumber, setIsEditingUserPhoneNumber] = React.useState<boolean>(false);
 
-    const [firstName, setFirstName] = React.useState<string>(user?.firstName || "");
-    const [lastName, setLastName] = React.useState<string>(user?.lastName || "");
-    const [email, setEmail] = React.useState<string>(user?.email || "");
-    const [emailError, setEmailError] = React.useState<string | null>(null);
-    const [phoneNumber, setPhoneNumber] = React.useState<string>(user?.phoneNumber || "");
+    const [firstName, setFirstName] = React.useState<string>(user?.firstName || ""); // Have to use fetched user instead
+    const [lastName, setLastName] = React.useState<string>(user?.lastName || ""); // Have to use fetched user
+    const [email, setEmail] = React.useState<string>(user?.email || ""); // Have to use fetched user
+    const [emailError, setEmailError] = React.useState<string | null>(null); // Have to use fetched user
+    const [phoneNumber, setPhoneNumber] = React.useState<string>(user?.phoneNumber || ""); // Have to use fetched user
 
     const handleUserFirstNameEditClick = () => {
         setIsEditingUserFirstName(true);
@@ -88,24 +92,19 @@ const UserDetails: React.FC = () => {
         setPhoneNumber(user?.phoneNumber || "");
     };
 
-
     return (
         <div className="p-6 bg-[#BAAEAE] rounded-2xl shadow-xl text-grey-900">
             <div className="mb-4">
                 <h2 className="text-3xl">First Name</h2>
                 <div className="flex">
-                    {isEditingUserFirstName ? (
-                        <input
-                            type="text"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
-                        />
-                    ) : (
-                        <p className="text-xl font-thin">{user.firstName}</p>
-                    )}
-                    {isEditingUserFirstName ? (
+                    {isEditingUserFirstName && isCurrentUser ? (
                         <>
+                            <input
+                                type="text"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
+                            />
                             <span
                                 className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
                                 onClick={handleUserFirstNameCheckClick}
@@ -120,31 +119,31 @@ const UserDetails: React.FC = () => {
                             </span>
                         </>
                     ) : (
-                        <span
-                            className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
-                            onClick={handleUserFirstNameEditClick}
-                        >
-                            <FiEdit2 size={20} />
-                        </span>
+                        <>
+                            <p className="text-xl font-thin">{user.firstName}</p>
+                            {isCurrentUser && (
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handleUserFirstNameEditClick}
+                                >
+                                    <FiEdit2 size={20} />
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
-
             <div className="mb-4">
                 <h2 className="text-3xl">Last Name</h2>
                 <div className="flex">
-                    {isEditingUserLastName ? (
-                        <input
-                            type="text"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
-                        />
-                    ) : (
-                        <p className="text-xl font-thin">{user.lastName}</p>
-                    )}
-                    {isEditingUserLastName ? (
+                    {isEditingUserLastName && isCurrentUser ? (
                         <>
+                            <input
+                                type="text"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
+                            />
                             <span
                                 className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
                                 onClick={handleUserLastNameCheckClick}
@@ -159,20 +158,24 @@ const UserDetails: React.FC = () => {
                             </span>
                         </>
                     ) : (
-                        <span
-                            className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
-                            onClick={handleUserLastNameEditClick}
-                        >
-                            <FiEdit2 size={20} />
-                        </span>
+                        <>
+                            <p className="text-xl font-thin">{user.lastName}</p>
+                            {isCurrentUser && (
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handleUserLastNameEditClick}
+                                >
+                                    <FiEdit2 size={20} />
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
-
             <div className="mb-4">
                 <h2 className="text-3xl">Email</h2>
                 <div className="flex">
-                    {isEditingUserEmail ? (
+                    {isEditingUserEmail && isCurrentUser ? (
                         <>
                             <input
                                 type="text"
@@ -184,12 +187,6 @@ const UserDetails: React.FC = () => {
                             {emailError && (
                                 <p className="text-red-500 text-sm ml-2 self-center">{emailError}</p>
                             )}
-                        </>
-                    ) : (
-                        <p className="text-xl font-thin">{user.email}</p>
-                    )}
-                    {isEditingUserEmail ? (
-                        <>
                             <span
                                 className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
                                 onClick={handleUserEmailCheckClick}
@@ -204,31 +201,31 @@ const UserDetails: React.FC = () => {
                             </span>
                         </>
                     ) : (
-                        <span
-                            className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
-                            onClick={handleUserEmailEditClick}
-                        >
-                            <FiEdit2 size={20} />
-                        </span>
+                        <>
+                            <p className="text-xl font-thin">{user.email}</p>
+                            {isCurrentUser && (
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handleUserEmailEditClick}
+                                >
+                                    <FiEdit2 size={20} />
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
-
             <div className="mb-4">
                 <h2 className="text-3xl">Phone number</h2>
                 <div className="flex">
                     {isEditingUserPhoneNumber ? (
-                        <input
-                            type="text"
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
-                        />
-                    ) : (
-                        <p className="text-xl font-thin">{user.phoneNumber}</p>
-                    )}
-                    {isEditingUserPhoneNumber ? (
                         <>
+                            <input
+                                type="text"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                className="p-2 text-xl font-thin bg-transparent outline-none border border-white"
+                            />
                             <span
                                 className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
                                 onClick={handleUserPhoneNumberCheckClick}
@@ -243,12 +240,17 @@ const UserDetails: React.FC = () => {
                             </span>
                         </>
                     ) : (
-                        <span
-                            className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
-                            onClick={handleUserPhoneNumberEditClick}
-                        >
-                            <FiEdit2 size={20} />
-                        </span>
+                        <>
+                            <p className="text-xl font-thin">{user.phoneNumber}</p>
+                            {isCurrentUser && (
+                                <span
+                                    className="self-center text-white hover:text-gray-300 ml-3 cursor-pointer"
+                                    onClick={handleUserPhoneNumberEditClick}
+                                >
+                                    <FiEdit2 size={20} />
+                                </span>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

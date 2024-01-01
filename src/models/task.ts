@@ -1,4 +1,4 @@
-import Board from "./board";
+import Section from "../enums/section";
 import User from "./user";
 
 interface Task {
@@ -7,7 +7,7 @@ interface Task {
     description: string;
     createdAt: Date;
     createdBy: User;
-    board: Board;
+    section: Section;
 }
 
 export default Task;

@@ -1,11 +1,12 @@
 import React from "react";
 import { FiMenu, FiCheck, FiX, FiEdit2, FiChevronDown } from "react-icons/fi";
-import TestImage from '../../assets/test.png';
 import { Link } from "react-router-dom";
+import { MAX_TITLE_LENGTH } from "../../constants";
+import { useBoardContext } from "../providers/BoardProvider";
+import { useUserContext } from "../providers/UserProvider";
 
 interface TopbarProps {
     onToggleSidebar: () => void;
-    pageTitle: string;
 }
 
 interface DropdownProps {
@@ -13,6 +14,8 @@ interface DropdownProps {
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ isOpen }) => {
+    const { user } = useUserContext(); // Act like this is the response from the API call
+
     if (!isOpen) return null;
 
     const handleSignOutClick = () => {
@@ -22,7 +25,7 @@ const Dropdown: React.FC<DropdownProps> = ({ isOpen }) => {
     return (
         <div className="text-gray-900 absolute top-30 right-0 w-40 bg-white border border-gray-300 rounded shadow">
             <ul className="py-2">
-                <Link to="/profile">
+                <Link to={`/users/${user.id}`}>
                     <li className="cursor-pointer px-4 py-2 hover:bg-gray-100">
                         Profile
                     </li>
@@ -36,11 +39,13 @@ const Dropdown: React.FC<DropdownProps> = ({ isOpen }) => {
 };
 
 const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
+    const { user } = useUserContext(); // Act like this is the response from the API call
+    const { board, updateBoard } = useBoardContext(); // Act like this is the response from the API call
+
     const [isEditingProjectTitle, setEditingProjectTitle] = React.useState<boolean>(false);
-    const [projectTitle, setProjectTitle] = React.useState<string>('Homify');
-    const [newProjectTitle, setNewProjectTitle] = React.useState<string>(projectTitle);
+    const [newProjectTitle, setNewProjectTitle] = React.useState<string>(board.title);
     const [isDropdownOpen, setDropdownOpen] = React.useState<boolean>(false);
-    const [isTitleTooLong, setTitleTooLong] = React.useState<boolean>(false);
+    const [isTitleTooLong, setIsTitleTooLong] = React.useState<boolean>(false);
 
     const handleToggleSidebar = () => {
         onToggleSidebar();
@@ -51,23 +56,24 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
     };
 
     const handleProjectTitleCheckClick = () => {
-        if (newProjectTitle.length > 13) {
-            setTitleTooLong(true);
+        if (newProjectTitle.length > MAX_TITLE_LENGTH) {
+            setIsTitleTooLong(true);
         } else {
-            setProjectTitle(newProjectTitle);
+            updateBoard({ ...board, title: newProjectTitle }); // Update board title
             setEditingProjectTitle(false);
-            setTitleTooLong(false);
+            setIsTitleTooLong(false);
         }
     };
 
     const handleProjectTitleCrossClick = () => {
         setEditingProjectTitle(false);
-        setTitleTooLong(false);
+        setNewProjectTitle(board.title); // Revert to the original title
+        setIsTitleTooLong(false);
     };
 
     const handleProjectTitleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewProjectTitle(event.target.value);
-        setTitleTooLong(false); // Reset the error when the input changes
+        setIsTitleTooLong(false); // Reset the error when the input changes
     };
 
     const handleDropdownClick = () => {
@@ -90,11 +96,12 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                                 type="text"
                                 value={newProjectTitle}
                                 onChange={handleProjectTitleInputChange}
-                                className={`self-center p-2 text-5xl sm:text-8xl bg-transparent border outline-none text-white w-2/4 ${isTitleTooLong ? "border-red-500" : "border-white"
-                                    }`}
+                                className={`self-center p-2 text-5xl sm:text-8xl bg-transparent border outline-none text-white w-2/4 ${newProjectTitle.length > MAX_TITLE_LENGTH ? "border-red-500" : "border-white"}`}
                             />
                             {isTitleTooLong && (
-                                <p className="text-red-500 text-sm ml-2 self-center">Title is too long</p>
+                                <p className="text-red-500 text-sm ml-3 self-center text-center">
+                                    Too long
+                                </p>
                             )}
                             <span
                                 className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
@@ -114,7 +121,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                             <h1
                                 className="self-center p-2 sm:p-0 text-5xl sm:text-8xl"
                             >
-                                {projectTitle}
+                                {board.title}
                             </h1>
                             <span
                                 className="self-center text-white hover:text-gray-300 focus:outline-none cursor-pointer hidden sm:flex"
@@ -128,7 +135,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
             </div>
             <div className="flex justify-center sm:items-stretch p-4 w-1/4 sm:p-0 text-white space-x-4">
                 <span className="flex relative cursor-pointer" onClick={handleDropdownClick}>
-                    <h1 className="self-center text-4xl">Anas Mourad</h1>
+                    <h1 className="self-center text-4xl">{user.firstName} {user.lastName}</h1>
                     <span
                         className="self-center text-white focus:outline-none"
                     >
@@ -137,7 +144,7 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
                     </span>
                 </span>
                 <div className="hidden sm:flex sm:items-center">
-                    <img src={TestImage} style={{ borderRadius: "50%", width: "150px", height: "150px" }} />
+                    <img src={user.image} className="rounded-3xl w-40" />
                 </div>
             </div>
         </header>
