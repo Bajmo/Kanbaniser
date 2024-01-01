@@ -4,8 +4,8 @@ import User from "./models/user";
 
 const mockUser: User = {
     id: 1,
-    firstname: "John",
-    lastname: "Doe",
+    firstName: "John",
+    lastName: "Doe",
     phoneNumber: "123-456-7890",
     email: "john.doe@example.com",
     password: "securepassword",
@@ -15,7 +15,6 @@ const mockBoard: Board = {
     id: 1,
     title: "Project Board",
     description: "Board for managing project tasks",
-    members: [mockUser],
     tasks: [],
 };
 
