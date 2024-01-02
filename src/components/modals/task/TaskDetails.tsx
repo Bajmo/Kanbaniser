@@ -13,8 +13,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
 
     const [isEditingTaskTitle, setEditingTaskTitle] = React.useState<boolean>(false);
     const [isEditingTaskDescription, setEditingTaskDescription] = React.useState<boolean>(false);
-    const [taskTitle, setTaskTitle] = React.useState<string>(task?.title || "");
-    const [taskDescription, setTaskDescription] = React.useState<string>(task?.description || "");
+    const [taskTitle, setTaskTitle] = React.useState<string>(task.title);
+    const [taskDescription, setTaskDescription] = React.useState<string>(task.description);
     const [isNewTaskTitleTooLong, setIsNewTaskTitleTooLong] = React.useState<boolean>(false);
     const [isNewTaskDescriptionTooLong, setIsNewTaskDescriptionTooLong] = React.useState<boolean>(false);
 
@@ -34,7 +34,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
 
     const handleTaskTitleCrossClick = () => {
         setEditingTaskTitle(false);
-        setTaskTitle(task?.title || "");
+        setTaskTitle(task.title);
         setIsNewTaskTitleTooLong(false);
     };
 
@@ -59,7 +59,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
 
     const handleTaskDescriptionCrossClick = () => {
         setEditingTaskDescription(false);
-        setTaskDescription(task?.description || "");
+        setTaskDescription(task.description);
         setIsNewTaskDescriptionTooLong(false);
     };
 
@@ -180,7 +180,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
                             Created by
                         </h2>
                         <p className="text-white text-xl font-thin">
-                            {task?.createdBy?.firstName} {task?.createdBy?.lastName}
+                            {task.createdBy === null ? 'Unknown' : task.createdBy.firstName + ' ' + task.createdBy.lastName}
                         </p>
                     </div>
                     <div className="mb-2">
@@ -188,7 +188,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ onClose, onDeleteTask }) => {
                             Created at
                         </h2>
                         <p className="text-white text-xl font-thin">
-                            {task?.createdAt instanceof Date ? task?.createdAt.toLocaleString() : ''}
+                            {task.createdAt instanceof Date ? task.createdAt.toLocaleString() : ''}
                         </p>
                     </div>
                 </div>
