@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FiX } from 'react-icons/fi';
 
 interface AddTaskProps {
@@ -8,8 +8,8 @@ interface AddTaskProps {
 }
 
 const AddTask: React.FC<AddTaskProps> = ({ section, onClose, onAddTask }) => {
-    const [taskTitle, setTaskTitle] = useState<string>('');
-    const [taskDescription, setTaskDescription] = useState<string>('');
+    const [taskTitle, setTaskTitle] = React.useState<string>('');
+    const [taskDescription, setTaskDescription] = React.useState<string>('');
 
     const handleTaskTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTaskTitle(event.target.value);
