@@ -1,6 +1,7 @@
 import React from "react";
 import TaskDetails from "../modals/task/TaskDetails";
 import { useTaskContext } from "../providers/TaskProvider";
+import Section from "../../enums";
 
 interface TaskCardProps {
     onDeleteTask: (taskId: number) => void;
@@ -17,7 +18,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ onDeleteTask }) => {
 
     return (
         <>
-            <div className="bg-white p-4 flex justify-between">
+            <div className={`${task.section === Section.Done ? "bg-[#EFFFD6]" : "bg-white"} p-4 flex justify-between`}>
                 <span className="text-xl">{task.title}</span>
                 <span
                     className="text-base hover:text-gray-400 focus:outline-none cursor-pointer flex items-center"
