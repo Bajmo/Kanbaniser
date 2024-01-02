@@ -4,6 +4,8 @@ import { mockBoard1, mockBoard2, mockBoard3, mockUser1, mockUser2, mockUser3 } f
 import Board from '../../models/board';
 import User from '../../models/user';
 import { Link } from 'react-router-dom';
+import AddBoard from '../modals/board/AddBoard';
+import AddUser from '../modals/user/AddUser';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,6 +13,8 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
+  const [isAddBoardModalOpen, setAddBoardModalOpen] = React.useState<boolean>(false);
+  const [isAddUserModalOpen, setAddUserModalOpen] = React.useState<boolean>(false);
   const [boards, setBoards] = React.useState<Board[]>([
     mockBoard1,
     mockBoard2,
@@ -21,6 +25,47 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     mockUser2,
     mockUser3
   ]);
+
+  const openAddBoardModal = () => {
+    setAddBoardModalOpen(true);
+  };
+
+  const closeAddBoardModal = () => {
+    setAddBoardModalOpen(false);
+  };
+
+  const handleAddBoard = (boardTitle: string, boardDescription: string) => {
+    const newBoard: Board = {
+      id: boards.length + 1,
+      title: boardTitle,
+      description: boardDescription,
+      tasks: []
+    };
+
+    setBoards((prevBoards) => [...prevBoards, newBoard]);
+  };
+
+  const openAddUserModal = () => {
+    setAddUserModalOpen(true);
+  };
+
+  const closeAddUserModal = () => {
+    setAddUserModalOpen(false);
+  };
+
+  const handleAddUser = (firstName: string, lastName: string, phoneNumber: string, email: string, initialPassword: string, imageLink: string) => {
+    const newUser: User = {
+      id: users.length + 1,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      email: email,
+      password: initialPassword,
+      image: imageLink
+    };
+
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+  };
 
   const handleDeleteBoard = (boardId: string) => {
     const updatedBoards = boards.filter(board => board.id.toString() !== boardId);
@@ -56,7 +101,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <h5 id="drawer-navigation-label" className="text-2xl text-white">
             Boards
           </h5>
-          <div className="rounded-full bg-white p-2 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer">
+          <div
+            onClick={openAddBoardModal}
+            className="rounded-full bg-white p-2 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer"
+          >
             <FiPlus />
           </div>
         </div>
@@ -84,7 +132,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <h5 id="drawer-navigation-label" className="text-2xl text-white">
             Team Members
           </h5>
-          <div className="rounded-full bg-white p-2 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer">
+          <div
+            onClick={openAddUserModal}
+            className="rounded-full bg-white p-2 text-grey-900 hover:bg-gray-200 focus:outline-none cursor-pointer"
+          >
             <FiPlus />
           </div>
         </div>
@@ -107,6 +158,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           ))}
         </ul>
       </div>
+      {isAddBoardModalOpen && <AddBoard onClose={closeAddBoardModal} onAddBoard={handleAddBoard} />}
+      {isAddUserModalOpen && <AddUser onClose={closeAddUserModal} onAddUser={handleAddUser} />}
     </div>
   );
 };
