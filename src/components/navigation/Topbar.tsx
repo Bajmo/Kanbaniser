@@ -2,6 +2,7 @@ import React from "react";
 import { FiMenu, FiChevronDown } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { useUserContext } from "../providers/UserProvider";
+import { TruncateText } from "../../utils";
 
 interface TopbarProps {
     onToggleSidebar: () => void;
@@ -66,9 +67,9 @@ const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar, title }) => {
                     </h1>
                 </div>
             </div>
-            <div className="flex justify-center sm:items-stretch p-4 w-1/4 sm:p-0 text-white space-x-4">
+            <div className="flex justify-center sm:items-stretch p-4 w-max sm:p-0 text-white space-x-4">
                 <span className="flex relative cursor-pointer" onClick={handleDropdownClick}>
-                    <h1 className="self-center text-4xl">{user.firstName} {user.lastName}</h1>
+                    <h1 className="self-center text-4xl">{TruncateText({ text: user.firstName.concat(" ", user.lastName), maxLength: 20 })}</h1>
                     <span
                         className="self-center text-white focus:outline-none"
                     >
