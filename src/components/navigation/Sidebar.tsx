@@ -16,7 +16,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     mockBoard2,
     mockBoard3
   ]);
-
   const [users, setUsers] = React.useState<User[]>([
     mockUser1,
     mockUser2,
