@@ -2,6 +2,7 @@ import React from "react";
 import { FiEdit2, FiCheck, FiX } from "react-icons/fi";
 import { useUserContext } from "../providers/UserProvider";
 import { useParams } from "react-router-dom";
+import { emailRegex } from "../../constants";
 
 const UserDetails: React.FC = () => {
     const { user, updateUser } = useUserContext();
@@ -76,7 +77,6 @@ const UserDetails: React.FC = () => {
     };
 
     const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
 

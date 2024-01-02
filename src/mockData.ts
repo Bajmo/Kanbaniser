@@ -1,4 +1,4 @@
-import Section from "./enums/section";
+import Section from "./enums";
 import Board from "./models/board";
 import Task from "./models/task";
 import User from "./models/user";

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
-import Section from '../../enums/section';
+import Section from '../../enums';
 import Task from '../../models/task';
 import TaskCard from './TaskCard';
 import AddTask from '../modals/task/AddTask';

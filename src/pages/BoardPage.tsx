@@ -1,6 +1,6 @@
 import BoardDescription from "../components/cards/BoardDescription";
 import BoardSection from "../components/cards/BoardSection";
-import Section from "../enums/section";
+import Section from "../enums";
 import { useParams } from "react-router-dom";
 import { BoardProvider } from "../components/providers/BoardProvider";
 import React from "react";

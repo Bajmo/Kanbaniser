@@ -1,4 +1,4 @@
-import Section from "../enums/section";
+import Section from "../enums";
 import User from "./user";
 
 interface Task {
