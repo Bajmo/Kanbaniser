@@ -111,19 +111,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <hr></hr>
         <ul className="font-medium mt-3 space-y-3">
           {boards.map((board) => (
-            <Link key={board.id} to={`/boards/${board.id}`}>
-              <li>
-                <div className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
-                  <span>{board.title}</span>
-                  <span
-                    className="text-red-400 hover:text-red-900 cursor-pointer"
-                    onClick={() => handleDeleteBoard(board.id.toString())}
-                  >
-                    <FiTrash2 />
-                  </span>
-                </div>
-              </li>
-            </Link>
+            <div key={board.id} onClick={onClose}>
+              <Link to={`/boards/${board.id}`}>
+                <li>
+                  <div className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
+                    <span>{board.title}</span>
+                    <span
+                      className="text-red-400 hover:text-red-900 cursor-pointer"
+                      onClick={() => handleDeleteBoard(board.id.toString())}
+                    >
+                      <FiTrash2 />
+                    </span>
+                  </div>
+                </li>
+              </Link>
+            </div>
           ))}
         </ul>
       </div>
@@ -142,19 +144,21 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         <hr></hr>
         <ul className="font-medium mt-3 space-y-3">
           {users.map((user) => (
-            <Link key={user.id} to={`/users/${user.id}`}>
-              <li>
-                <div className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
-                  <span>{user.firstName} {user.lastName}</span>
-                  <span
-                    className="text-red-400 hover:text-red-900 cursor-pointer"
-                    onClick={() => handleDeleteUser(user.id.toString())}
-                  >
-                    <FiTrash2 />
-                  </span>
-                </div>
-              </li>
-            </Link>
+            <div key={user.id} onClick={onClose}>
+              <Link to={`/users/${user.id}`}>
+                <li>
+                  <div className="flex justify-between items-center p-1 text-white rounded-lg hover:bg-gray-100 hover:text-gray-900">
+                    <span>{user.firstName} {user.lastName}</span>
+                    <span
+                      className="text-red-400 hover:text-red-900 cursor-pointer"
+                      onClick={() => handleDeleteUser(user.id.toString())}
+                    >
+                      <FiTrash2 />
+                    </span>
+                  </div>
+                </li>
+              </Link>
+            </div>
           ))}
         </ul>
       </div>
